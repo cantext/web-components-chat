@@ -25,7 +25,7 @@ export default class MessageList extends ElementMixin {
   }
 
   connectedCallback() {
-    this.messages = messageHistory;
+    this.messages = [];
     this.name = 'Rajasegar';
     const messageList = (messages) => {
         return messages.map((m) => {
@@ -37,15 +37,16 @@ export default class MessageList extends ElementMixin {
   }
 
   attributeChangedCallback() {
-    let newMessage = this.getAttribute('new-message');
-    if (newMessage) {
-      let rootEl = this.$('.sc-message-list');
-      let $message = document.createElement('c-message');
-      $message.setAttribute('data-message', newMessage);
-      rootEl.appendChild($message);
-
-    }
-
+    const msg = this.getAttribute('new-message');
+    if (!msg)
+      return;
+    let {type, author, data} = JSON.parse(msg);
+    let rootEl = this.$('.sc-message-list');
+    let $message = document.createElement('c-message');
+    $message.setAttribute('type', type);
+    $message.setAttribute('author', author);
+    $message.setAttribute('message', data.text);
+    rootEl.appendChild($message);
   }
 }
 customElements.define('message-list', MessageList);

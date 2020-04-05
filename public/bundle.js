@@ -84,110 +84,6 @@ ${markup}
   }
   customElements.define('widget-header', Header);
 
-  var messageHistory = [{
-    type: 'text',
-    author: "me",
-    data: {
-      text: "Why don't they have salsa on the table?"
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "What do you need salsa for?"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "Salsa is now the number one condiment in America."
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "You know why? Because people like to say 'salsa.' 'Excuse me, do you have salsa?' 'We need more salsa.' 'Where is the salsa? No salsa?'"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "You know it must be impossible for a Spanish person to order seltzer and not get salsa. 'I wanted seltzer, not salsa.'"
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "Don't you know the difference between seltzer and salsa?? You have the seltezer after the salsa!"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "See, this should be a show. This is the show. "
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "What?"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "This. Just talking."
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "Yeah, right."
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "I'm really serious. I think that's a good idea. "
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "Just talking? Well what's the show about?"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "It's about nothing."
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "No story?"
-    }
-  }, {
-    type: 'text',
-    author: "me",
-    data: {
-      text: "No forget the story. "
-    }
-  }, {
-    type: 'text',
-    author: "them",
-    data: {
-      text: "You've got to have a story."
-    }
-  }, {
-    type: 'emoji',
-    author: "me",
-    data: {
-      emoji: "😋"
-    }
-  }];
-
   var markup$1 = "<div class=\"sc-message\">\n  <div class=\"sc-message--content\">\n  </div>\n</div>\n";
 
   var style$2 = ".sc-message {\n  width: 300px;\n  margin: auto;\n  padding-bottom: 10px;\n  display: flex;\n}\n\n.sc-message--content {\n  width: 100%;\n  display: flex;\n}\n\n.sc-message--content.sent {\n  justify-content: flex-end;\n}\n\n.sc-message--content.sent .sc-message--avatar {\n  display: none;\n}\n\n.sc-message--avatar {\n  background-image: url(https://d13yacurqjgara.cloudfront.net/assets/avatar-default-aa2eab7684294781f93bc99ad394a0eb3249c5768c21390163c9f55ea8ef83a4.gif);\n  background-repeat: no-repeat;\n  background-size: 100%;\n  background-position: center;\n  min-width: 30px;\n  min-height: 30px;\n  border-radius: 50%;\n  align-self: center;\n  margin-right: 15px;\n}\n\n@media (max-width: 450px) {\n  .sc-message {\n    width: 80%;\n  }\n}\n";
@@ -307,7 +203,7 @@ ${markup$4}
     }
 
     connectedCallback() {
-      this.messages = messageHistory;
+      this.messages = [];
       this.name = 'Rajasegar';
 
       const messageList = messages => {
@@ -321,14 +217,19 @@ ${markup$4}
     }
 
     attributeChangedCallback() {
-      let newMessage = this.getAttribute('new-message');
-
-      if (newMessage) {
-        let rootEl = this.$('.sc-message-list');
-        let $message = document.createElement('c-message');
-        $message.setAttribute('data-message', newMessage);
-        rootEl.appendChild($message);
-      }
+      const msg = this.getAttribute('new-message');
+      if (!msg) return;
+      let {
+        type,
+        author,
+        data
+      } = JSON.parse(msg);
+      let rootEl = this.$('.sc-message-list');
+      let $message = document.createElement('c-message');
+      $message.setAttribute('type', type);
+      $message.setAttribute('author', author);
+      $message.setAttribute('message', data.text);
+      rootEl.appendChild($message);
     }
 
   }
